@@ -41,6 +41,24 @@ logger.addHandler(fh)
 # path configuration
 abspath_result = '/remote/ceph/user/s/ssakurai/Data/1ES1959+650'
 
+def copy_star(args,abspath_result):
+    cmd_star = ['scp','{0.server}:{1:}/ST.03.{0.period:02d}/Star/NSB{0.nsb}/{0.date}/star*root'.format(args,abspath_result),'.']
+    ret_star = run_process(cmd_star)
+    logger.info(ret_star[0])
+    logger.error(ret_star[1])
+
+def copy_odie(args,abspath_result):
+    cmd_odie = ['scp','{0.server}:{1:}/ST.03.{0.period:02d}/Odie/NSB{0.nsb}/{0.date}/Output*root'.format(args,abspath_result),'.']
+    ret_odie = run_process(cmd_odie)
+    logger.info(ret_odie[0])
+    logger.error(ret_odie[1])
+
+def copy_flute(args,abspath_result):
+    cmd_flute = ['scp','{0.server}:{1:}/ST.03.{0.period:02d}/Flute/NSB{0.nsb}/{0.date}/*root'.format(args,abspath_result),'.']
+    ret_flute = run_process(cmd_flute)
+    logger.info(ret_flute[0])
+    logger.error(ret_flute[1])
+
 def run_process(command):
     returns = subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     stdout, stderr = returns.communicate()
@@ -48,22 +66,9 @@ def run_process(command):
 
 def main():
     logger.info('SCP starts')
-
-    cmd_star = ['scp','{0.server}:{1:}/ST.03.{0.period:02d}/Star/NSB{0.nsb}/{0.date}/star*root'.format(args,abspath_result),'.']
-    ret_star = run_process(cmd_star)
-    logger.info(ret_star[0])
-    logger.error(ret_star[1])
-
-    cmd_odie = ['scp','{0.server}:{1:}/ST.03.{0.period:02d}/Odie/NSB{0.nsb}/{0.date}/Output*root'.format(args,abspath_result),'.']
-    ret_odie = run_process(cmd_odie)
-    logger.info(ret_odie[0])
-    logger.error(ret_odie[1])
-
-    cmd_flute = ['scp','{0.server}:{1:}/ST.03.{0.period:02d}/Flute/NSB{0.nsb}/{0.date}/*root'.format(args,abspath_result),'.']
-    ret_flute = run_process(cmd_flute)
-    logger.info(ret_flute[0])
-    logger.error(ret_flute[1])
-
+    copy_star(args,abspath_result)
+    copy_odie(args,abspath_result)
+    copy_flute(args,abspath_result)
     logger.info('Done')
 
 
