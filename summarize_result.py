@@ -11,6 +11,7 @@ def make_preamble(outfile):
     outfile.write('\\documentclass[a4paper,10pt]{article}\n')
     outfile.write('\\usepackage{graphicx}\n')
     outfile.write('\\usepackage{a4wide}\n')
+    outfile.write('\\usepackage{here}\n')
 
 def begin_document(outfile):
     outfile.write('\\begin{document}\n')
@@ -28,7 +29,7 @@ def change_page(outfile):
     outfile.write('\\clearpage\n\n')
 
 def add_figure(out_file,figurepath,caption,label):
-    out_file.write('\\begin{figure}\n')
+    out_file.write('\\begin{figure}[H]\n')
     out_file.write('\\center\n')
     out_file.write('\\includegraphics[width=1.0\\linewidth]{'+figurepath+'}\n')
     out_file.write('\\caption{'+caption+'}\n')
@@ -37,7 +38,7 @@ def add_figure(out_file,figurepath,caption,label):
 
 def add_figures(out_file,figurepaths,captions,labels):
     width_minip = 1.0/len(figurepaths)
-    out_file.write('\\begin{figure}\n')
+    out_file.write('\\begin{figure}[H]\n')
     for i_fig in range(len(figurepaths)):
         out_file.write('\\begin{minipage}{'+str(width_minip)+'\\hsize}\n')
         out_file.write('\\center\n')
@@ -75,7 +76,6 @@ def main():
     texfile.write('Comments from Run Book\\\\\n')
     texfile.write('Deatail in Fig.\\ref{'+'runplot'+'}\n')
     add_figure(texfile,plotname[0],'Run Condition', 'runplot')
-    change_page(texfile)
     # part 2
     change_section(texfile,'Image Cleaning')
     for i_nsb in args.nsb:
@@ -84,7 +84,6 @@ def main():
         lab_tmp = ['star_{}_M1'.format(i_nsb),'star_{}_M2'.format(i_nsb)]
         texfile.write('Fraction of surviving pedestal M1: Fig.\\ref{'+lab_tmp[0]+'} and M2: Fig.\\ref{'+lab_tmp[1]+'}\n')
         add_figures(texfile,figpath_star[i_nsb],cap_tmp,lab_tmp)
-    change_page(texfile)
     # part 3
     change_section(texfile,'$\\theta^2$ plot')
     for i_nsb in args.nsb:
@@ -94,7 +93,6 @@ def main():
         texfile.write('$\\theta^2$ plot in LE: Fig.\\ref{'+lab_tmp[0]+'} and FR: Fig.\\ref{'+lab_tmp[1]+'}\n')
         add_figure(texfile,figpath_odie[i_nsb][0],cap_tmp[0],lab_tmp[0])
         add_figure(texfile,figpath_odie[i_nsb][1],cap_tmp[1],lab_tmp[1])
-    change_page(texfile)
     # part 4
     change_section(texfile,'SED and Light Curve')
     for i_nsb in args.nsb:
