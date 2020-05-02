@@ -34,6 +34,9 @@ parameters = ['Runnumber','Trans9km','Trans6km','Trans3km',
               'CurZd','NomZd',
               'MeanHV','MeanDC','MedDC']
 
+def output_for_analysis(outfile,date,runnum,dc_flag,hv_flag,zdvalue,cdvalue,params):
+    outfile.write('{0:s}, {1:.0f}, {2:s}, {3:s}, {4:s}, {5:s}, {6[0]:.1f}, {6[1]:.1f}, {6[2]:.1f}, {6[3]:.1f}, {6[4]:.1f}, {6[5]:.1f}, {6[6]:.1f}, {6[7]:.1f}, {6[8]:.1f}, {6[9]:.1f}, {6[10]:.1f}, {6[11]:.1f}, {6[12]:.1f}, {6[13]:.1f}, {6[14]:.1f}, {6[15]:.1f}, {6[16]:.1f}, {6[17]:.1f}, {6[18]:.1f}, {6[19]:.1f}, {6[20]:.1f}, {6[21]:.1f}, {6[22]:.1f}, {6[23]:.1f}, {6[24]:.1f}, {6[25]:.1f}, {6[26]:.1f}, {6[27]:.1f}, {6[28]:.1f}, {6[29]:.1f}, {6[30]:.1f}, {6[31]:.1f}, {6[32]:.1f}\n'.format(date, runnum, dc_flag, hv_flag, zdvalue, cdvalue, params))
+
 def output_for_wiki(outfile,date,runnum,dc_flag,hv_flag,meanmeddc,minzd,maxzd,meanT3k,meanT6k,meanT9k):
     outfile.write('| {0:s} || {1:.0f} || {4:.1f} || {2:s} || {3:s} || {5:.1f} || {6:.1f} || {7:.2f} || {8:.2f} || {9:.2f} ||\n'.format(date, runnum, dc_flag, hv_flag, meanmeddc, minzd, maxzd, meanT3k, meanT6k, meanT9k))
     outfile.write('|-\n')
@@ -50,6 +53,8 @@ def header_for_tex(outfile):
     outfile.write('\\begin{tabular}{llrrrrrrrr}\n')
     outfile.write('Date & Run Number & MedDC aved in run & NSB Level & HV & Min Zd & Max Zd & Trans3km & Trans6km & Trans9km \\\\\n')
 
+def footer_for_analysis(outfile):
+    outfile.write('memo: \n')
 
 def footer_for_wiki(outfile):
     outfile.write('| || || || || || || || || || ||\n')
@@ -181,9 +186,24 @@ def main():
             output_for_tex(out_file,args.date,runnums[i_run],dcflag,hvflag,
                             mean_values['MedDC'][i_run],min_values['NomZd'][i_run],max_values['NomZd'][i_run],
                             mean_values['Trans3km'][i_run],mean_values['Trans6km'][i_run],mean_values['Trans9km'][i_run])
+        elif args.format == 'ana':
+            output_for_analysis(out_file,args.date,runnums[i_run],dcflag,hvflag,zdvalue,cdvalue,
+                                [min_values['MeanHV'][i_run],mean_values['MeanHV'][i_run],max_values['MeanHV'][i_run],
+                                min_values['MedDC'][i_run],mean_values['MedDC'][i_run],max_values['MedDC'][i_run],
+                                min_values['MeanDC'][i_run],mean_values['MeanDC'][i_run],max_values['MeanDC'][i_run],
+                                min_values['NomZd'][i_run],mean_values['NomZd'][i_run],max_values['NomZd'][i_run],
+                                min_values['CurZd'][i_run],mean_values['CurZd'][i_run],max_values['CurZd'][i_run],
+                                min_values['Humidity'][i_run],mean_values['Humidity'][i_run],max_values['Humidity'][i_run],
+                                min_values['NumStars'][i_run],mean_values['NumStars'][i_run],max_values['NumStars'][i_run],
+                                min_values['Cloudiness'][i_run],mean_values['Cloudiness'][i_run],max_values['Cloudiness'][i_run],
+                                min_values['Trans3km'][i_run],mean_values['Trans3km'][i_run],max_values['Trans3km'][i_run],
+                                min_values['Trans6km'][i_run],mean_values['Trans6km'][i_run],max_values['Trans6km'][i_run],
+                                min_values['Trans9km'][i_run],mean_values['Trans9km'][i_run],max_values['Trans9km'][i_run]])
     if args.format == 'wiki':
         footer_for_wiki(out_file)
     elif args.format == 'tex':
         footer_for_tex(out_file)
+    elif args.format == 'ana':
+        footer_for_analysis(out_file)
 if __name__ == "__main__":
     main()
