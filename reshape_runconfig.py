@@ -50,6 +50,7 @@ def footer_for_tex(outfile):
 
 def header_for_tex(outfile):
     outfile.write('\\begin{table}[H]\n')
+    outfile.write('\\scriptsize\n')
     outfile.write('\\begin{tabular}{llrrrrrrrr}\n')
     outfile.write('Date & Run Number & MedDC aved in run & NSB Level & HV & Min Zd & Max Zd & Trans3km & Trans6km & Trans9km \\\\\n')
 
